@@ -1,6 +1,6 @@
 syntax = "proto3";
 package workflow;
-option go_package="github.com/liudy1993/injector/proto/";
+option go_package="github.com/liudy093/injector/proto/";
 
 message WorkflowNode {
   // 工作流节点名称

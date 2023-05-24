@@ -1,4 +1,4 @@
-module github.com/liudy1993/injector
+module github.com/liudy093/injector
 
 go 1.20
 

@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package="github.com/liudy1993/injector/proto/";
+option go_package="github.com/liudy093/injector/proto/";
 import "proto/wf.proto";
 package scheduler_controller;
 

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/liudy1993/injector/proto"
+	"github.com/liudy093/injector/proto"
 	"google.golang.org/grpc"
 	"gopkg.in/yaml.v3"
 )
