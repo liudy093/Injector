@@ -29,6 +29,6 @@ jobs:
       - name: Build injector and push
         uses: docker/build-push-action@v3
         with:
-          context: injector
+          context: .
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/injector:${{ steps.vars.outputs.sha_short }}
