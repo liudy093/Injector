@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+    generateName: argo-test-wf-
+spec:
+    entrypoint: NoName
+    podGC:
+        strategy: OnPodSuccess
+    ttlStrategy:
+        secondsAfterCompletion: 60
+    templates:
+        - name: task
+          container:
+            image: harbor.cloudcontrolsystems.cn/workflow/task:latest
+            imagePullPolicy: IfNotPresent
+            resources:
+                limits:
+                    cpu: 2000m
+                    memory: 128Mi
+                requests:
+                    cpu: 1000m
+                    memory: 64Mi
+        - name: NoName
+          dag:
+            tasks:
+                - name: t0
+                  dependencies: []
+                  template: task
+                - name: t1
+                  dependencies:
+                    - t0
+                  template: task
+                - name: t3
+                  dependencies:
+                    - t1
+                  template: task
+                - name: t4
+                  dependencies:
+                    - t1
+                  template: task
+                - name: t2
+                  dependencies:
+                    - t1
+                  template: task
+                - name: t5
+                  dependencies:
+                    - t3
+                    - t4
+                    - t2
+                  template: task

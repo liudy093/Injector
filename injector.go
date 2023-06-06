@@ -73,7 +73,7 @@ func readDag() {
 }
 
 func jsonToWorkflowYaml(workflowJson []byte) []byte {
-	//定义结构
+	//定义结构体
 	type Task struct {
 		Name         string   `json:"name"`
 		Dependencies []string `json:"dependencies"`
@@ -251,7 +251,6 @@ func sendToSc(workflow []byte, NEW_CORE_ADDRESS string) int64 {
 	_ = channle.Close()
 
 	return time.Now().UnixNano() - a1
-
 }
 
 func main() {
@@ -259,7 +258,7 @@ func main() {
 	os.Setenv("NEW_CORE_ADDRESS", "172.28.0.90:6060")
 	os.Setenv("TEST_WITH_ARGO", "false")
 	os.Setenv("TEST_WITH_SC", "true")
-	os.Setenv("BATCH_SIZE", "10")
+	os.Setenv("BATCH_SIZE", "1")
 	os.Setenv("SC_TYPE", "snappy")
 
 	NEW_CORE_ADDRESS := os.Getenv("NEW_CORE_ADDRESS")
