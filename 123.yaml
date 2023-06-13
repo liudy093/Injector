@@ -11,7 +11,7 @@ spec:
     templates:
         - name: task
           container:
-            image: harbor.cloudcontrolsystems.cn/workflow/task:latest
+            image: liudy093/task:latest
             imagePullPolicy: IfNotPresent
             resources:
                 limits:
@@ -30,21 +30,30 @@ spec:
                   dependencies:
                     - t0
                   template: task
-                - name: t3
-                  dependencies:
-                    - t1
-                  template: task
-                - name: t4
-                  dependencies:
-                    - t1
-                  template: task
                 - name: t2
                   dependencies:
-                    - t1
+                    - t0
                   template: task
                 - name: t5
                   dependencies:
+                    - t1
+                    - t2
+                  template: task
+                - name: t3
+                  dependencies:
+                    - t0
+                  template: task
+                - name: t4
+                  dependencies:
+                    - t0
+                  template: task
+                - name: t6
+                  dependencies:
                     - t3
                     - t4
-                    - t2
+                  template: task
+                - name: t7
+                  dependencies:
+                    - t5
+                    - t6
                   template: task

@@ -32,7 +32,7 @@ func readDag() {
 	var jsonFilesPath []string
 	var protoFilesPath []string
 
-	file, err := os.Open("files.txt")
+	file, err := os.Open("tmp/dag/files.txt")
 	if err != nil {
 		log.Println("无法打开文件：", err)
 		return
@@ -53,7 +53,7 @@ func readDag() {
 
 	// 读取JSON文件
 	for _, path := range jsonFilesPath {
-		jsonFile, err := os.ReadFile(path)
+		jsonFile, err := os.ReadFile("tmp/dag/" + path)
 		if err != nil {
 			log.Println("无法打开文件：", err)
 			return
@@ -162,7 +162,7 @@ func jsonToWorkflowYaml(workflowJson []byte) []byte {
 					} `yaml:"requests"`
 				} `yaml:"resources"`
 			}{
-				Image:           "harbor.cloudcontrolsystems.cn/workflow/task:latest",
+				Image:           workflow.Topology[0].Template,
 				ImagePullPolicy: "IfNotPresent",
 				Resources: struct {
 					Limits struct {
@@ -255,15 +255,17 @@ func sendToSc(workflow []byte, NEW_CORE_ADDRESS string) int64 {
 
 func main() {
 	log.Println("Strat!")
-	os.Setenv("NEW_CORE_ADDRESS", "172.28.0.90:6060")
-	os.Setenv("TEST_WITH_ARGO", "false")
-	os.Setenv("TEST_WITH_SC", "true")
-	os.Setenv("BATCH_SIZE", "1")
-	os.Setenv("SC_TYPE", "snappy")
+	// os.Setenv("NEW_CORE_ADDRESS", "172.28.0.60:6060")
+	// os.Setenv("TEST_WITH_ARGO", "true")
+	// os.Setenv("TEST_WITH_SC", "false")
+	// os.Setenv("TEST_NUM", "1000")
+	// os.Setenv("BATCH_SIZE", "1")
+	// os.Setenv("SC_TYPE", "snappy")
 
 	NEW_CORE_ADDRESS := os.Getenv("NEW_CORE_ADDRESS")
 	TEST_WITH_ARGO := os.Getenv("TEST_WITH_ARGO")
 	TEST_WITH_SC := os.Getenv("TEST_WITH_SC")
+	TEST_NUM := os.Getenv("TEST_NUM")
 	BATCH_SIZE := os.Getenv("BATCH_SIZE")
 	SC_TYPE := os.Getenv("SC_TYPE")
 
@@ -274,31 +276,37 @@ func main() {
 		log.Println(err)
 	}
 
+	testNum, err := strconv.Atoi(TEST_NUM)
+	if err != nil {
+		log.Println(err)
+	}
+
 	if TEST_WITH_ARGO == "true" {
 		log.Println("Start to send workflow to argo!")
-		for i, workflow := range workflowsJson {
-			sendToArgo(workflow.Json)
-			if i >= batchSize-1 {
-				break
+		for i := 0; i < testNum; i++ {
+			for j, workflow := range workflowsJson {
+				sendToArgo(workflow.Json)
+				if j >= batchSize-1 {
+					break
+				}
 			}
-
 		}
 	}
 	if TEST_WITH_SC == "true" {
 		log.Println("Start to send workflow to scheduler controller!")
 
 		if SC_TYPE == "snappy" {
-			for i, workflow := range workflowsProto {
+			for j, workflow := range workflowsProto {
 				sendToSc(workflow.Proto, NEW_CORE_ADDRESS)
-				if i >= batchSize-1 {
+				if j >= batchSize-1 {
 					break
 				}
 			}
 		}
 		if SC_TYPE == "json" {
-			for i, workflow := range workflowsJson {
+			for j, workflow := range workflowsJson {
 				sendToSc(workflow.Json, NEW_CORE_ADDRESS)
-				if i >= batchSize-1 {
+				if j >= batchSize-1 {
 					break
 				}
 			}
