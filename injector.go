@@ -53,7 +53,7 @@ func readDag() {
 
 	// 读取JSON文件
 	for _, path := range jsonFilesPath {
-		jsonFile, err := os.ReadFile("tmp/dag/" + path)
+		jsonFile, err := os.ReadFile("/tmp/dag/" + path)
 		if err != nil {
 			log.Println("无法打开文件：", err)
 			return
@@ -212,12 +212,12 @@ func sendToArgo(workflowJson []byte) int64 {
 	a1 := time.Now().UnixNano()
 	yaml := jsonToWorkflowYaml(workflowJson)
 	//写入linux文件
-	err := os.WriteFile("123.yaml", yaml, 0644)
+	err := os.WriteFile("/tmp/123.yaml", yaml, 0644)
 	if err != nil {
 		log.Println(err)
 	}
 	//执行argo提交工作流命令
-	cmd := exec.Command("/bin/argo", "submit", "-n", "argo", "123.yaml")
+	cmd := exec.Command("/bin/argo", "submit", "-n", "argo", "/tmp/123.yaml")
 	err = cmd.Run()
 	if err != nil {
 		log.Println(err)
