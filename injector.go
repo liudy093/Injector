@@ -32,9 +32,9 @@ func readDag() {
 	var jsonFilesPath []string
 	var protoFilesPath []string
 
-	file, err := os.Open("tmp/dag/files.txt")
+	file, err := os.Open("/tmp/dag/files.txt")
 	if err != nil {
-		log.Println("无法打开文件1：", err)
+		log.Println("无法打开文件：", err)
 		return
 	}
 	defer file.Close()
