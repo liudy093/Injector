@@ -34,7 +34,7 @@ func readDag() {
 
 	file, err := os.Open("tmp/dag/files.txt")
 	if err != nil {
-		log.Println("无法打开文件：", err)
+		log.Println("无法打开文件1：", err)
 		return
 	}
 	defer file.Close()
