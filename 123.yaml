@@ -11,7 +11,7 @@ spec:
     templates:
         - name: task
           container:
-            image: liudy093/task:latest
+            image: liudy093/task-emulator:latest
             imagePullPolicy: IfNotPresent
             resources:
                 limits:
@@ -20,6 +20,7 @@ spec:
                 requests:
                     cpu: 1000m
                     memory: 64Mi
+            args:  ["-c","1","-m","100","-t","5","-i","3"]
         - name: NoName
           dag:
             tasks:

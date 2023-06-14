@@ -100,6 +100,8 @@ func jsonToWorkflowYaml(workflowJson []byte) []byte {
 					Memory string `yaml:"memory"`
 				} `yaml:"requests"`
 			} `yaml:"resources"`
+			//task-task-emulator
+			Args []string `yaml:"args"`
 		} `yaml:"container,omitempty"`
 		Dag struct {
 			Tasks []Task `yaml:"tasks"`
@@ -161,6 +163,7 @@ func jsonToWorkflowYaml(workflowJson []byte) []byte {
 						Memory string `yaml:"memory"`
 					} `yaml:"requests"`
 				} `yaml:"resources"`
+				Args []string `yaml:"args"`
 			}{
 				Image:           workflow.Topology[0].Template,
 				ImagePullPolicy: "IfNotPresent",
@@ -189,6 +192,7 @@ func jsonToWorkflowYaml(workflowJson []byte) []byte {
 						Memory: "64Mi",
 					},
 				},
+				Args: []string{"-c", "1", "-m", "100", "-t", "5", "-i", "3"},
 			},
 		},
 		{
@@ -283,14 +287,17 @@ func main() {
 
 	if TEST_WITH_ARGO == "true" {
 		log.Println("Start to send workflow to argo!")
+		num := 0
 		for i := 0; i < testNum; i++ {
 			for j, workflow := range workflowsJson {
 				sendToArgo(workflow.Json)
+				num++
 				if j >= batchSize-1 {
 					break
 				}
 			}
 		}
+		log.Println("Argo总计发送", num, "个工作流")
 	}
 	if TEST_WITH_SC == "true" {
 		log.Println("Start to send workflow to scheduler controller!")
