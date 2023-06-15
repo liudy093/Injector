@@ -146,7 +146,7 @@ func jsonToWorkflowYaml(workflowJson []byte) []byte {
 	yamlWorkflow.Metadata.GenerateName = "argo-test-wf-"
 	yamlWorkflow.Spec.Entrypoint = workflow.WorkflowName
 	yamlWorkflow.Spec.PodGC.Strategy = "OnPodSuccess"
-	yamlWorkflow.Spec.TtlStrategy.SecondsAfterCompletion = 60
+	yamlWorkflow.Spec.TtlStrategy.SecondsAfterCompletion = 5
 	yamlWorkflow.Spec.Template = []Template{
 		{
 			Name: "task",
